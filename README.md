@@ -18,6 +18,11 @@ SigLevel = Never
 Server = https://muxdesktop.github.io/muxdesk-repo/$arch
 ```
 
+## App-এর APK-ও এই repo-র Releases-এ
+MuxLike app-এর APK-ও একই জায়গা থেকে পাওয়া যাবে — rootfs image আর
+APK একই repo-র Releases-এ থাকবে (আলাদা tag-এ, যেমন `app-v1.0`)।
+APK বানায় MuxLike app chat; তোলা হবে main chat থেকে, image-এর সাথে।
+
 ## Rootfs image (GitHub Releases)
 Image গুলো বড় (~800 MB) বলে git-এ রাখা যায় না — সেগুলো এই repo-র
 Releases-এ asset হিসেবে ওঠে: tag `rootfs-v3.2`, asset নাম
