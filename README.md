@@ -1,4 +1,4 @@
-# muxdesktop
+# muxdesk-repo
 
 MuxDesk (Arch-ভিত্তিক নিজের distro) — pacman repo + rootfs hosting।
 
@@ -15,7 +15,7 @@ pacman.conf:
 ```ini
 [muxdesk]
 SigLevel = Never
-Server = https://mthe74660-cmyk.github.io/muxdesktop/$arch
+Server = https://mthe74660-cmyk.github.io/muxdesk-repo/$arch
 ```
 
 ## Rootfs image (GitHub Releases)
