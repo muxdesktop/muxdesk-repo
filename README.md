@@ -15,7 +15,7 @@ pacman.conf:
 ```ini
 [muxdesk]
 SigLevel = Never
-Server = https://mthe74660-cmyk.github.io/muxdesk-repo/$arch
+Server = https://muxdesktop.github.io/muxdesk-repo/$arch
 ```
 
 ## Rootfs image (GitHub Releases)
