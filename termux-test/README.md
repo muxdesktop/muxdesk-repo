@@ -1,4 +1,12 @@
-# MuxLike DE — Termux Test Setup
+# MuxLike DE — Termux Test Setup (v2)
+
+> v2 fix: Debian detection no longer assumes the old proot-distro
+> rootfs path. proot-distro 5.x keeps containers at
+> `var/lib/proot-distro/containers/debian/rootfs` (older versions used
+> `installed-rootfs/debian`); the script now asks proot-distro itself
+> (`list` + a login probe) and works with either layout. Re-runs resume
+> cleanly when Debian is already installed, and the start script is
+> created up front instead of only at the end.
 
 Run the **MuxLike desktop environment** (our own DE: labwc + our C
 panel/dock/launcher + Mux Files + Mux Settings) on your phone inside
@@ -26,7 +34,7 @@ the real canonical code — only the display path is a stand-in.
 # 1) Download and unpack (in Termux)
 pkg install -y unzip curl
 curl -L -o muxlike-termux-test.zip \
-  https://github.com/muxdesktop/muxdesk-repo/releases/download/muxlike-termux-test-v1/muxlike-termux-test.zip
+  https://github.com/muxdesktop/muxdesk-repo/releases/download/muxlike-termux-test-v2/muxlike-termux-test.zip
 unzip -o muxlike-termux-test.zip
 
 # 2) Setup (long: installs Debian, packages, compiles our components)

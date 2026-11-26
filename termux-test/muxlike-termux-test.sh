@@ -39,25 +39,67 @@ else
   warn "install the Termux:X11 app (APK from the Termux:X11 GitHub releases / F-Droid) before starting the desktop."
 fi
 
+# The start script is created FIRST, so it exists even if a later step
+# fails and has to be re-run (v1 bug: it was only created at the end).
+cp "$HERE/start-muxlike-test.sh" "$HOME/start-muxlike-test.sh" && chmod +x "$HOME/start-muxlike-test.sh"
+ok "Start script placed: ~/start-muxlike-test.sh (ready once setup completes)"
+
 step "Step 2/4: Debian proot"
-ROOTFS_DIR="$PREFIX/var/lib/proot-distro/installed-rootfs/debian"
-if [ -d "$ROOTFS_DIR" ]; then
-  ok "Debian is already installed — keeping it"
+# Where is the Debian rootfs? DO NOT hardcode one layout:
+#   proot-distro 5.x:  $PREFIX/var/lib/proot-distro/containers/debian/rootfs
+#   proot-distro <=4:  $PREFIX/var/lib/proot-distro/installed-rootfs/debian (legacy)
+# Detection asks proot-distro itself first (its `list`), then the paths,
+# then a login probe (which also triggers the legacy->new migration).
+PD_DIR="$PREFIX/var/lib/proot-distro"
+find_debian_rootfs() {
+  local d
+  for d in "$PD_DIR/containers/debian/rootfs" "$PD_DIR/installed-rootfs/debian"; do
+    if [ -d "$d" ]; then printf '%s' "$d"; return 0; fi
+  done
+  return 1
+}
+debian_installed() {
+  find_debian_rootfs >/dev/null 2>&1 && return 0
+  proot-distro list 2>/dev/null | grep -qw 'debian' && return 0
+  return 1
+}
+echo "proot-distro version: $(proot-distro --version 2>/dev/null || echo unknown)"
+if debian_installed; then
+  ok "Debian is already installed — keeping it (resume)"
 else
   echo "Installing Debian (this downloads ~100-200 MB and can take a while)..."
-  proot-distro install debian || die "proot-distro install debian failed"
-  [ -d "$ROOTFS_DIR" ] && ok "Debian installed" || die "Debian rootfs not found after install"
+  proot-distro install debian || warn "proot-distro install reported an error — verifying before giving up"
+  if ! debian_installed; then
+    # Last resort: a login probe — succeeds only if the container really
+    # exists, and migrates a legacy-layout rootfs to the new layout.
+    if proot-distro login debian -- /bin/true 2>/dev/null; then
+      ok "Debian verified by login probe"
+    else
+      die "Debian is not installed and the install did not create it. Run 'proot-distro install debian' manually, read its error, then re-run this script."
+    fi
+  fi
+  ok "Debian installed"
 fi
+ROOTFS_DIR="$(find_debian_rootfs || true)"
+[ -n "$ROOTFS_DIR" ] && ok "Debian rootfs found at: $ROOTFS_DIR" \
+  || warn "Rootfs path not visible from Termux — the package will be bind-mounted into Debian instead of copied (same result)"
 
-step "Step 3/4: Copying the MuxLike package into Debian"
-DEST="$ROOTFS_DIR/root/muxlike-test"
-rm -rf "$DEST"; mkdir -p "$DEST"
-cp -r "$HERE/." "$DEST/" || die "copy into Debian rootfs failed"
-ok "Package copied to Debian: /root/muxlike-test"
+step "Step 3/4: Getting the MuxLike package into Debian"
+BIND_ARGS=""
+if [ -n "$ROOTFS_DIR" ]; then
+  DEST="$ROOTFS_DIR/root/muxlike-test"
+  rm -rf "$DEST"; mkdir -p "$DEST"
+  cp -r "$HERE/." "$DEST/" || die "copy into Debian rootfs failed"
+  ok "Package copied to Debian: /root/muxlike-test"
+else
+  BIND_ARGS="--bind $HERE:/root/muxlike-test"
+  ok "Package will be bind-mounted at /root/muxlike-test"
+fi
 
 step "Step 4/4: Building and installing inside Debian (packages + our code)"
 echo "This is the long step: apt packages, then compiling panel/dock/launcher."
-proot-distro login debian -- /bin/bash /root/muxlike-test/inside-debian.sh
+# shellcheck disable=SC2086
+proot-distro login $BIND_ARGS debian -- /bin/bash /root/muxlike-test/inside-debian.sh
 RC=$?
 [ "$RC" = 0 ] && ok "Inside-Debian setup finished" || warn "Inside-Debian setup ended with warnings/failures (exit $RC) — read the [FAIL]/[WARN] lines above. The desktop may still start; the launcher is the most likely missing piece."
 
