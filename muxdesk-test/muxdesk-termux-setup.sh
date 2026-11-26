@@ -71,7 +71,7 @@ cp "$HERE/start-muxdesk-wayland.sh" "$HOME/start-muxdesk-wayland.sh" && chmod +x
 printf '%s' "$HERE" > "$HOME/.muxdesk-test-pkgdir"
 ok "Start scripts placed: ~/start-muxdesk.sh (X11 test), ~/start-muxdesk-wayland.sh (Wayland test)"
 
-step "Step 2/4: MuxDesk container in proot-distro"
+step "Step 2/4: MuxOS container in proot-distro"
 # Ask proot-distro itself whether the container exists (its `list`),
 # with a login probe as fallback. Never trust one hardcoded path:
 # proot-distro 5.x keeps containers in containers/<name>/rootfs,
@@ -83,7 +83,7 @@ container_installed() {
   return 1
 }
 if container_installed; then
-  ok "MuxDesk container is already installed — keeping it (resume)"
+  ok "MuxOS container is already installed — keeping it (resume)"
 else
   step "Step 3/4: Installing the MuxDesk rootfs image"
   IMAGE="${1:-${MUXDESK_IMAGE:-}}"
@@ -92,7 +92,7 @@ else
     TARBALL="$IMAGE"
   elif [ -n "$IMAGE" ] && [ "${IMAGE#https://}" != "$IMAGE" ]; then
     TARBALL="$HOME/$(basename "$IMAGE")"
-    echo "Downloading the MuxDesk image to $TARBALL (large — keep Wi-Fi on)..."
+    echo "Downloading the MuxOS image to $TARBALL (large — keep Wi-Fi on)..."
     curl -L -C - -o "$TARBALL" "$IMAGE" || die "download failed — check the URL and re-run (the download resumes)"
   else
     for d in "$HOME" "$HOME/storage/downloads" "$PWD"; do
@@ -107,12 +107,12 @@ else
   proot-distro install "$TARBALL" --name "$CONTAINER" || warn "proot-distro install reported an error — verifying before giving up"
   if ! container_installed; then
     if proot-distro login "$CONTAINER" -- /bin/true 2>/dev/null; then
-      ok "MuxDesk container verified by login probe"
+      ok "MuxOS container verified by login probe"
     else
-      die "The MuxDesk container was not created. Run 'proot-distro install \"$TARBALL\" --name muxdesk' manually, read its error, then re-run this script."
+      die "The MuxOS container was not created. Run 'proot-distro install \"$TARBALL\" --name muxdesk' manually, read its error, then re-run this script."
     fi
   fi
-  ok "MuxDesk container installed"
+  ok "MuxOS container installed"
 fi
 
 step "Step 4/4: Checking the session entry inside the distro"

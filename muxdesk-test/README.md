@@ -16,7 +16,7 @@ the native app path is the real target. A Wayland nesting option
 ## Requirements
 
 - **Termux** (F-Droid / GitHub build), **Termux:X11 app** installed
-- The **MuxDesk ARM64 rootfs tarball** (`muxdesk-rootfs-aarch64-*.tar.*`)
+- The **MuxOS ARM64 rootfs tarball** (`muxdesk-rootfs-aarch64-*.tar.*` or `muxos-*.tar.*`)
   from the muxdesk-repo Releases (built by the Installer chat)
 - ~2–3 GB free space
 
@@ -30,7 +30,7 @@ curl -L -o muxdesk-termux-test.zip \
 unzip -o muxdesk-termux-test.zip
 
 # 2) Setup — installs proot-distro/Termux:X11 support, then installs
-#    the MuxDesk image as the proot-distro container "muxdesk".
+#    the MuxOS image as the proot-distro container "muxdesk".
 #    Pass the image path or its download URL, or put the tarball in
 #    ~/ or ~/storage/downloads and it is found automatically.
 bash muxdesk-test/muxdesk-termux-setup.sh /path/to/muxdesk-rootfs-aarch64-vX.tar.gz

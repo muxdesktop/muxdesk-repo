@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # MuxOS distro — X11 test start (run in Termux, after setup).
 # Starts Termux:X11, WAITS until its socket really answers, then enters
-# the MuxDesk container via proot-distro and starts the DE session
+# the MuxOS container via proot-distro and starts the DE session
 # nested on labwc's X11 backend.
 set -u
 # The package dir (holds inside-start.sh) is recorded by the setup
@@ -24,7 +24,7 @@ SHM_DIR="$PREFIX/tmp/muxdesk-shm"
 
 command -v termux-x11 >/dev/null 2>&1 || { fail "termux-x11 command not found — run the setup script first: bash muxdesk-termux-setup.sh"; exit 1; }
 command -v proot-distro >/dev/null 2>&1 || { fail "proot-distro not found — run the setup script first"; exit 1; }
-proot-distro list 2>/dev/null | grep -qw "$CONTAINER" || { fail "MuxDesk container not installed — run the setup script first."; exit 1; }
+proot-distro list 2>/dev/null | grep -qw "$CONTAINER" || { fail "MuxOS container not installed — run the setup script first."; exit 1; }
 
 step "Starting Termux:X11 server on :0"
 # The socket directory must exist BEFORE proot starts, or proot drops
@@ -59,7 +59,7 @@ if [ "$READY" != 1 ]; then
 fi
 ok "Termux:X11 server is up (socket $SOCK)"
 
-step "Starting the MuxDesk DE session (labwc nested on X11)"
+step "Starting the MuxOS DE session (labwc nested on X11)"
 echo "Now open the Termux:X11 app to see the desktop."
 echo "To stop: exit the session from inside, or press Ctrl+C here."
 proot-distro login --shared-tmp \

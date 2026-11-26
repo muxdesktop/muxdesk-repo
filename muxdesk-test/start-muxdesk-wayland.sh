@@ -1,6 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # MuxOS distro — Wayland test start (run in Termux, after setup).
-# EXPERIMENTAL: enters the MuxDesk container via proot-distro and
+# EXPERIMENTAL: enters the MuxOS container via proot-distro and
 # starts the DE session nested on labwc's WAYLAND backend, displayed
 # by the Termux:Wayland app. The X11 path (start-muxdesk.sh) is the
 # primary, better-tested one — see README.
@@ -19,7 +19,7 @@ fail() { echo "[FAIL] $*"; }
 SHM_DIR="$PREFIX/tmp/muxdesk-shm"
 
 command -v proot-distro >/dev/null 2>&1 || { fail "proot-distro not found — run the setup script first"; exit 1; }
-proot-distro list 2>/dev/null | grep -qw "$CONTAINER" || { fail "MuxDesk container not installed — run the setup script first."; exit 1; }
+proot-distro list 2>/dev/null | grep -qw "$CONTAINER" || { fail "MuxOS container not installed — run the setup script first."; exit 1; }
 
 step "Looking for the Termux:Wayland compositor socket"
 echo "The Termux:Wayland app must be OPEN (it creates the socket when it runs)."
@@ -38,7 +38,7 @@ fi
 ok "Wayland socket dir: $WL_DIR"
 mkdir -p "$SHM_DIR"
 
-step "Starting the MuxDesk DE session (labwc nested on Wayland)"
+step "Starting the MuxOS DE session (labwc nested on Wayland)"
 echo "Switch to the Termux:Wayland app to see the desktop."
 echo "To stop: exit the session from inside, or press Ctrl+C here."
 proot-distro login \

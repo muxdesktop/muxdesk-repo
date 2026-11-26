@@ -37,11 +37,11 @@ if [ "$MODE" = "wayland" ]; then
     [ -n "$WL_SOCK" ] && export WAYLAND_DISPLAY="$WL_SOCK"
   fi
   export WLR_BACKENDS=wayland
-  echo "Starting the MuxDesk session (labwc nested on Wayland, WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-unset}) ..."
+  echo "Starting the MuxOS session (labwc nested on Wayland, WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-unset}) ..."
 else
   export DISPLAY="${DISPLAY:-:0}"
   export WLR_BACKENDS=x11
-  echo "Starting the MuxDesk session (labwc nested on X11, DISPLAY=$DISPLAY) ..."
+  echo "Starting the MuxOS session (labwc nested on X11, DISPLAY=$DISPLAY) ..."
 fi
 echo "Open the Termux:X11 app (X11 test) or the Termux:Wayland app (Wayland test) to see the desktop."
 
