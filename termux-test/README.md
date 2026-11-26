@@ -1,5 +1,12 @@
-# MuxLike DE — Termux Test Setup (v2)
+# MuxLike DE — Termux Test Setup (v3)
 
+> v3 fix: the start script no longer races the X server. It creates
+> `$PREFIX/tmp/.X11-unix` first, starts termux-x11 with its output kept
+> in `~/muxlike-x11.log`, and **waits until the X socket actually
+> answers** (up to 30 s) before starting labwc — v2 slept a fixed 2 s,
+> so on a busy phone labwc died with "Failed to open xcb connection".
+> It also uses only `--shared-tmp` (the bind that carries the socket).
+>
 > v2 fix: Debian detection no longer assumes the old proot-distro
 > rootfs path. proot-distro 5.x keeps containers at
 > `var/lib/proot-distro/containers/debian/rootfs` (older versions used
@@ -34,7 +41,7 @@ the real canonical code — only the display path is a stand-in.
 # 1) Download and unpack (in Termux)
 pkg install -y unzip curl
 curl -L -o muxlike-termux-test.zip \
-  https://github.com/muxdesktop/muxdesk-repo/releases/download/muxlike-termux-test-v2/muxlike-termux-test.zip
+  https://github.com/muxdesktop/muxdesk-repo/releases/download/muxlike-termux-test-v3/muxlike-termux-test.zip
 unzip -o muxlike-termux-test.zip
 
 # 2) Setup (long: installs Debian, packages, compiles our components)
@@ -71,6 +78,11 @@ safe to re-run; it keeps an existing Debian install.
 
 ## Troubleshooting
 
+- **"Failed to open xcb connection"** — labwc started before the X
+  server socket existed. Fixed in v3 (the start script waits for the
+  socket). If it still happens, read `~/muxlike-x11.log`, open the
+  Termux:X11 app once, and close other Termux sessions running an X
+  server, then re-run the start script.
 - **Black screen in Termux:X11** — the X server started but labwc did
   not. Re-run the start script and read the Termux output; the usual
   cause is a failed build in setup (re-run the setup script and look

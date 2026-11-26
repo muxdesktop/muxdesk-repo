@@ -29,6 +29,7 @@ pkg update -y || warn "pkg update had problems — continuing with what is insta
 pkg install -y x11-repo || warn "x11-repo install failed — termux-x11-nightly may not be found"
 pkg install -y proot-distro || die "proot-distro install failed"
 pkg install -y termux-x11-nightly || warn "termux-x11-nightly install failed — the X server command may be missing"
+pkg install -y xorg-xdpyinfo || warn "xorg-xdpyinfo install failed — the start script will fall back to a socket-file check"
 command -v proot-distro >/dev/null 2>&1 && ok "proot-distro installed" || die "proot-distro still missing"
 command -v termux-x11 >/dev/null 2>&1 && ok "termux-x11 command installed" || warn "termux-x11 command not found — check the x11-repo step above"
 # The Termux:X11 Android app is a separate app from the command.
