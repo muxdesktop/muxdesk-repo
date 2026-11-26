@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- wlr-foreign-toplevel-management-unstable-v1 — vendored copy
+     (protocol text: ISC, wlroots). Vendored for the same reason as the
+     layer-shell XML: generated at build time with wayland-scanner.
+     Version 1 is declared: title/app_id/state/activate/close are all
+     in v1 and that is everything mux-panel needs. -->
+<protocol name="wlr_foreign_toplevel_management_unstable_v1">
+  <interface name="zwlr_foreign_toplevel_manager_v1" version="1">
+    <description summary="list and control toplevel windows">
+      The manager announces one handle per toplevel window and lets
+      clients activate/close them (taskbars, docks, panels).
+    </description>
+    <event name="toplevel">
+      <arg name="id" type="new_id" interface="zwlr_foreign_toplevel_handle_v1"/>
+    </event>
+    <event name="finished"/>
+    <request name="stop" type="destructor"/>
+  </interface>
+
+  <interface name="zwlr_foreign_toplevel_handle_v1" version="1">
+    <enum name="state">
+      <entry name="maximized" value="0"/>
+      <entry name="minimized" value="1"/>
+      <entry name="activated" value="2"/>
+    </enum>
+    <enum name="error">
+      <entry name="invalid_rectangle" value="0"/>
+    </enum>
+    <event name="title">
+      <arg name="title" type="string"/>
+    </event>
+    <event name="app_id">
+      <arg name="app_id" type="string"/>
+    </event>
+    <event name="output_enter">
+      <arg name="output" type="object" interface="wl_output"/>
+    </event>
+    <event name="output_leave">
+      <arg name="output" type="object" interface="wl_output"/>
+    </event>
+    <event name="state">
+      <arg name="state" type="array"/>
+    </event>
+    <event name="done"/>
+    <event name="closed"/>
+    <request name="set_maximized"/>
+    <request name="unset_maximized"/>
+    <request name="set_minimized"/>
+    <request name="unset_minimized"/>
+    <request name="activate">
+      <arg name="seat" type="object" interface="wl_seat"/>
+    </request>
+    <request name="close"/>
+    <request name="set_rectangle">
+      <arg name="surface" type="object" interface="wl_surface"/>
+      <arg name="x" type="int"/>
+      <arg name="y" type="int"/>
+      <arg name="width" type="int"/>
+      <arg name="height" type="int"/>
+    </request>
+    <request name="destroy" type="destructor"/>
+  </interface>
+</protocol>

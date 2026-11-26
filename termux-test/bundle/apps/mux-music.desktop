@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Music
+Comment=গান শোনা
+Exec=sh -c 'command -v lollypop >/dev/null && exec lollypop; command -v amberol >/dev/null && exec amberol; exec gnome-music'
+Icon=mux-music
+Terminal=false
+Categories=Audio;Music;Player;
+Keywords=music;songs;audio;
+StartupNotify=true
+X-MuxDesk-MacLike=true

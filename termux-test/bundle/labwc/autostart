@@ -1,0 +1,31 @@
+#!/bin/sh
+# MuxLike DE — labwc autostart | ~/.config/labwc/autostart
+# Canonical পথ (DESIGN.md §3): নিজের C component-ই চলবে — waybar interim বাতিল।
+# ক্রম: wallpaper → panel → dock → notification/polkit
+# কোনো অংশ না থাকলে বাকিগুলো তবু চলবে — desktop ভাঙবে না।
+# নিজের binary গুলো ~/.local/bin-এ — PATH-এ না থাকলেও যেন পাওয়া যায়
+PATH="$HOME/.local/bin:/usr/local/bin:$PATH"; export PATH
+
+# 1) Wallpaper — canonical gradient (জায়গা অনুযায়ী খুঁজে নেয়)
+for wp in /usr/share/backgrounds/muxdesk/muxlike-gradient.svg \
+          "$HOME/.local/share/backgrounds/muxlike/muxlike-gradient.svg" \
+          "$HOME/.local/share/backgrounds/muxlike/wallpaper/muxlike-gradient.svg"; do
+  if [ -f "$wp" ]; then
+    command -v swaybg >/dev/null 2>&1 && swaybg -i "$wp" -m fill &
+    break
+  fi
+done
+
+# 2) Panel — নিজের mux-panel (C, components/panel)
+mux-panel &
+
+# 3) Dock — নিজের mux-dock (C, components/dock)
+mux-dock &
+
+# Launcher autostart-এ ওঠে না — mux-launcher command/keybind-এ toggle
+# (DESIGN.md §3: panel logo, dock বোতাম, Super — তিনটেই ওই command ডাকে)।
+
+# 4) Notification + Polkit (থাকলে)
+command -v mako >/dev/null 2>&1 && mako &
+[ -x /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 ] && \
+  /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &

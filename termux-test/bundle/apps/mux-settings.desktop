@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Settings
+Comment=সিস্টেম সাজানো — আমাদের নিজের settings app (GTK4)
+Exec=mux-settings
+Icon=mux-settings
+Terminal=false
+Categories=Settings;System;
+Keywords=settings;preferences;
+StartupNotify=true
+StartupWMClass=com.muxdesk.MuxSettings
+X-MuxDesk-MacLike=true
+X-MuxDesk-OwnApp=true

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Camera
+Comment=ছবি তোলা
+Exec=sh -c 'command -v gnome-snapshot >/dev/null && exec gnome-snapshot; command -v snapshot >/dev/null && exec snapshot; exec cheese'
+Icon=mux-camera
+Terminal=false
+Categories=Graphics;Photography;
+Keywords=camera;photo;
+StartupNotify=true
+X-MuxDesk-MacLike=true

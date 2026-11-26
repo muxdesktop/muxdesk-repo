@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Calculator
+Comment=হিসাব করা
+Exec=gnome-calculator
+Icon=mux-calculator
+Terminal=false
+Categories=Utility;Calculator;
+Keywords=calculator;math;
+StartupNotify=true
+X-MuxDesk-MacLike=true

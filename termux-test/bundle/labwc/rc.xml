@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- MuxLike DE — labwc rc.xml | base: wlroots/labwc | আমাদের নিজের DE
+     বসানোর জায়গা: ~/.config/labwc/rc.xml
+     সৎ নোট: labwc-র নিজের schema অনুযায়ী লেখা; labwc binary এই
+     মেশিনে নেই বলে runtime পরীক্ষা হয়নি — XML parse যাচাই হয়েছে।
+     অজানা key পেলে labwc সেটা উপেক্ষা করে, ভাঙে না। -->
+<labwc_config>
+
+  <core>
+    <decoration>server</decoration>
+    <gap>8</gap>
+    <adaptiveSync>no</adaptiveSync>
+    <reuseOutputMode>yes</reuseOutputMode>
+  </core>
+
+  <placement>
+    <policy>center</policy>
+  </placement>
+
+  <theme>
+    <name>MuxLike</name>
+    <!-- traffic-light বামে (labwc 0.20.x: layout-এ একটা colon
+         বাধ্যতামূলক, left:right) — close, iconify, max বামে,
+         ডান দিক খালি -->
+    <titlebar>
+      <layout>close,iconify,max:</layout>
+      <showTitle>yes</showTitle>
+    </titlebar>
+    <!-- labwc 0.8+ এ cornerRadius কাজ করে; পুরনো version-এ উপেক্ষিত হবে.
+         সৎ সীমা: SSD titlebar গোল হলেও client-এর নিজের (CSD) window-র
+         corner compositor বদলাতে পারে না — theme/README দেখো। -->
+    <cornerRadius>12</cornerRadius>
+    <followSystemStyle>no</followSystemStyle>
+  </theme>
+
+  <font place="ActiveWindow">
+    <name>sans</name>
+    <size>11</size>
+    <weight>bold</weight>
+  </font>
+  <font place="InactiveWindow">
+    <name>sans</name>
+    <size>11</size>
+  </font>
+  <font place="MenuItem">
+    <name>sans</name>
+    <size>11</size>
+  </font>
+  <font place="OnScreenDisplay">
+    <name>sans</name>
+    <size>14</size>
+  </font>
+
+  <windowSwitcher preview="yes" outlines="yes">
+    <osd show="yes" />
+    <fields>
+      <field content="type" width="10%" />
+      <field content="title" width="90%" />
+    </fields>
+  </windowSwitcher>
+
+  <desktops>
+    <popupTime>1000</popupTime>
+    <names>
+      <name>১</name><name>২</name><name>৩</name><name>৪</name>
+    </names>
+  </desktops>
+
+  <resistance>
+    <screenEdgeStrength>20</screenEdgeStrength>
+    <windowEdgeStrength>20</windowEdgeStrength>
+  </resistance>
+
+  <focus>
+    <followMouse>no</followMouse>
+    <focusNew>yes</focusNew>
+    <raiseOnFocus>no</raiseOnFocus>
+  </focus>
+
+  <windowRules>
+    <!-- serverDecoration জোর করে দিও না: GTK app গুলো নিজের headerbar
+         (CSD) ব্যবহার করবে — নাহলে double titlebar হয় (main chat-এর
+         live test-এ ধরা পড়া bug, 2026-11-26)। Dialog type window
+         labwc নিজেই float করে, আলাদা rule লাগে না। -->
+  </windowRules>
+
+  <libinput>
+    <device category="default">
+      <naturalScroll>yes</naturalScroll>
+      <tap>yes</tap>
+      <pointerSpeed>0.0</pointerSpeed>
+    </device>
+  </libinput>
+
+  <keyboard repeatRate="25" repeatDelay="400">
+    <default />
+    <!-- আমাদের keybind: Super+Space = mux-launcher search, Super+A/F4 = grid
+         (DESIGN.md §3 — mux-launcher command-ই একমাত্র launcher পথ; Integration ঠিক করেছে) -->
+    <keybind key="W-q"><action name="Close" /></keybind>
+    <keybind key="W-m"><action name="Iconify" /></keybind>
+    <keybind key="W-f"><action name="ToggleFullscreen" /></keybind>
+    <keybind key="W-Return"><action name="Execute"><command>foot</command></action></keybind>
+    <keybind key="A-Tab"><action name="NextWindow" /></keybind>
+    <keybind key="A-S-Tab"><action name="PreviousWindow" /></keybind>
+    <keybind key="W-space"><action name="Execute"><command>mux-launcher --search</command></action></keybind>
+    <keybind key="W-a"><action name="Execute"><command>mux-launcher --grid</command></action></keybind>
+    <keybind key="F4"><action name="Execute"><command>mux-launcher --grid</command></action></keybind>
+    <keybind key="W-e"><action name="Execute"><command>mux-files</command></action></keybind>
+    <keybind key="W-Left"><action name="SnapToEdge" direction="left" /></keybind>
+    <keybind key="W-Right"><action name="SnapToEdge" direction="right" /></keybind>
+    <keybind key="W-Up"><action name="ToggleMaximize" /></keybind>
+    <keybind key="W-1"><action name="GoToDesktop" to="1" /></keybind>
+    <keybind key="W-2"><action name="GoToDesktop" to="2" /></keybind>
+    <keybind key="W-3"><action name="GoToDesktop" to="3" /></keybind>
+    <keybind key="W-4"><action name="GoToDesktop" to="4" /></keybind>
+    <keybind key="W-S-1"><action name="SendToDesktop" to="1" /></keybind>
+    <keybind key="W-S-2"><action name="SendToDesktop" to="2" /></keybind>
+    <keybind key="W-S-3"><action name="SendToDesktop" to="3" /></keybind>
+    <keybind key="W-S-4"><action name="SendToDesktop" to="4" /></keybind>
+    <keybind key="XF86AudioRaiseVolume"><action name="Execute"><command>wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+</command></action></keybind>
+    <keybind key="XF86AudioLowerVolume"><action name="Execute"><command>wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-</command></action></keybind>
+    <keybind key="XF86AudioMute"><action name="Execute"><command>wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle</command></action></keybind>
+    <keybind key="Print"><action name="Execute"><command>grim</command></action></keybind>
+  </keyboard>
+
+  <mouse>
+    <default />
+    <context name="TitleBar">
+      <mousebind button="Left" action="Drag"><action name="Move" /></mousebind>
+      <mousebind button="Left" action="DoubleClick"><action name="ToggleMaximize" /></mousebind>
+    </context>
+    <context name="Root">
+      <mousebind button="Right" action="Press"><action name="ShowMenu" menu="root-menu" /></mousebind>
+    </context>
+  </mouse>
+
+</labwc_config>

@@ -1,0 +1,15 @@
+# MuxLike DE — labwc environment | ~/.config/labwc/environment
+# এক লাইনে একটা করে KEY=VALUE; labwc চালু হওয়ার আগে পড়ে।
+XDG_CURRENT_DESKTOP=MuxLike
+XDG_SESSION_DESKTOP=muxlike
+DESKTOP_SESSION=muxlike
+GTK_THEME=MuxLike
+XCURSOR_THEME=Adwaita
+XCURSOR_SIZE=24
+MOZ_ENABLE_WAYLAND=1
+QT_QPA_PLATFORM=wayland;xcb
+SDL_VIDEODRIVER=wayland
+CLUTTER_BACKEND=wayland
+# ফোনে GPU নেই — software rendering (মূল MuxDesk-এর নিয়মই)
+LIBGL_ALWAYS_SOFTWARE=1
+GSK_RENDERER=cairo

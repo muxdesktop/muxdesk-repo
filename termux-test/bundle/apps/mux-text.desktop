@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Text
+Comment=লেখা সম্পাদনা
+Exec=sh -c 'command -v gnome-text-editor >/dev/null && exec gnome-text-editor "$@"; exec gedit "$@"' sh %U
+Icon=mux-text
+Terminal=false
+Categories=Utility;TextEditor;
+Keywords=text;editor;
+StartupNotify=true
+X-MuxDesk-MacLike=true

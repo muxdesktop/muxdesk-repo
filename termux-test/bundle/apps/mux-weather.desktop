@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Weather
+Comment=আবহাওয়া
+Exec=gnome-weather
+Icon=mux-weather
+Terminal=false
+Categories=Utility;Weather;
+Keywords=weather;forecast;
+StartupNotify=true
+X-MuxDesk-MacLike=true

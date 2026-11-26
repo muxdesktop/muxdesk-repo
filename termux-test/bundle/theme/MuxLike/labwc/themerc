@@ -1,0 +1,57 @@
+# MuxLike — labwc window decoration theme
+# বসানোর জায়গা: ~/.local/share/themes/MuxLike/labwc/themerc
+# (একই ফোল্ডারে *.xbm বোতাম গুলো)
+#
+# Traffic-light: বোতাম গুলো XBM mask — labwc বোতামের রঙ themerc-এর
+# *.bg.color থেকে mask-এ রঙ বসায়। তাই লাল/হলুদ/সবুজ আসে এই রঙ থেকে,
+# XBM শুধু আকার (গোল + glyph-এর ফাঁক) দেয়।
+# সৎ সীমা: XBM এক-রঙা mask — আসল gradient/ছায়াওয়ালা traffic-light
+# labwc SSD-তে সম্ভব না; রঙ সমতল (flat) হবে, macOS-এর মতো চকচকে না।
+
+border.width: 1
+padding.width: 8
+padding.height: 6
+window.titlebar.padding.width: 8
+
+window.active.border.color: #5a3fd4
+window.inactive.border.color: #3a3f55
+
+window.active.title.bg.color: #232338
+window.inactive.title.bg.color: #171927
+
+window.active.label.text.color: #f2f3fa
+window.inactive.label.text.color: #9aa0b8
+window.active.label.text.font: sans Bold 11
+window.inactive.label.text.font: sans 11
+
+# traffic-light রঙ — বাম থেকে close / iconify(minimize) / maximize
+window.active.button.close.unpressed.image.color: #ff5f57
+window.active.button.close.hover.image.color: #ff5f57
+window.inactive.button.close.unpressed.image.color: #8a4a47
+window.active.button.iconify.unpressed.image.color: #febc2e
+window.active.button.iconify.hover.image.color: #febc2e
+window.inactive.button.iconify.unpressed.image.color: #8a743f
+window.active.button.max.unpressed.image.color: #28c840
+window.active.button.max.hover.image.color: #28c840
+window.inactive.button.max.unpressed.image.color: #3f7a4c
+window.active.button.menu.unpressed.image.color: #e8eaf6
+window.inactive.button.menu.unpressed.image.color: #9aa0b8
+window.active.button.desk.unpressed.image.color: #7c5cff
+window.inactive.button.desk.unpressed.image.color: #5a3fd4
+
+menu.border.color: #5a3fd4
+menu.items.bg: Solid Flat
+menu.items.bg.color: #1b1e2e
+menu.items.text.color: #e8eaf6
+menu.items.active.bg: Solid Flat
+menu.items.active.bg.color: #7c5cff
+menu.items.active.text.color: #ffffff
+menu.title.bg: Solid Flat
+menu.title.bg.color: #232338
+menu.title.text.color: #ffffff
+
+osd.bg: Solid Flat
+osd.bg.color: #171927
+osd.label.text.color: #e8eaf6
+osd.border.color: #7c5cff
+osd.border.width: 1

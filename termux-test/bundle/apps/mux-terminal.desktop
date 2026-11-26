@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Terminal
+Comment=কমান্ড চালানো
+Exec=sh -c 'command -v gnome-terminal >/dev/null && exec gnome-terminal; command -v gnome-console >/dev/null && exec gnome-console; command -v kgx >/dev/null && exec kgx; exec ptyxis'
+Icon=mux-terminal
+Terminal=false
+Categories=System;TerminalEmulator;
+Keywords=terminal;console;shell;
+StartupNotify=true
+X-MuxDesk-MacLike=true

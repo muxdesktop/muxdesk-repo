@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Store
+Comment=app/package বসানো ও update — আমাদের নিজের store (pacman)
+Exec=mux-store
+Icon=mux-store
+Terminal=false
+Categories=System;PackageManager;
+Keywords=store;software;install;pacman;
+StartupNotify=true
+StartupWMClass=com.muxdesk.MuxStore
+X-MuxDesk-MacLike=true
+X-MuxDesk-OwnApp=true

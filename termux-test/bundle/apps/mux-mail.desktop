@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Mail
+Comment=ইমেইল
+Exec=sh -c 'command -v geary >/dev/null && exec geary; exec thunderbird'
+Icon=mux-mail
+Terminal=false
+Categories=Network;Email;
+Keywords=mail;email;
+StartupNotify=true
+X-MuxDesk-MacLike=true

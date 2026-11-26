@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Notes
+Comment=নোট লেখা
+Exec=sh -c 'command -v gnome-notes >/dev/null && exec gnome-notes; exec bijiben'
+Icon=mux-notes
+Terminal=false
+Categories=Office;Utility;
+Keywords=notes;bijiben;
+StartupNotify=true
+X-MuxDesk-MacLike=true

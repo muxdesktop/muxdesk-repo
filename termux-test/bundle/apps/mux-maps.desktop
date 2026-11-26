@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Maps
+Comment=মানচিত্র
+Exec=gnome-maps
+Icon=mux-maps
+Terminal=false
+Categories=Utility;Maps;
+Keywords=maps;location;
+StartupNotify=true
+X-MuxDesk-MacLike=true

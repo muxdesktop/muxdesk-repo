@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- MuxLike DE — labwc root menu | ~/.config/labwc/menu.xml -->
+<openbox_menu>
+  <menu id="root-menu" label="MuxDesk">
+    <item label="Mux Files" icon="mux-files"><action name="Execute"><command>nautilus</command></action></item>
+    <item label="Mux Browser" icon="mux-browser"><action name="Execute"><command>firefox</command></action></item>
+    <item label="Terminal" icon="mux-terminal"><action name="Execute"><command>foot</command></action></item>
+    <separator />
+    <item label="App খুঁজুন (Launcher)" icon="mux-launchpad"><action name="Execute"><command>fuzzel</command></action></item>
+    <item label="Mux Settings" icon="mux-settings"><action name="Execute"><command>gnome-control-center</command></action></item>
+    <separator />
+    <menu id="session-menu" label="Session">
+      <item label="Reconfigure labwc"><action name="Reconfigure" /></item>
+      <item label="বের হোন (Logout)"><action name="Exit" /></item>
+    </menu>
+  </menu>
+</openbox_menu>

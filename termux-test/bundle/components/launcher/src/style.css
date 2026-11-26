@@ -1,0 +1,143 @@
+/* mux-launcher style.css — MuxLike palette (FINAL অনুমোদিত)
+ * violet #7c5cff · গভীর violet #5a3fd4 · mint #00c2a8 · coral #ff6f61
+ * গাঢ় ভিত্তি #12141f · হালকা #e8eaf6
+ * Apple-এর কোনো রঙ/চিহ্ন হুবহু নকল নয় — নিজের palette-ই পরিচয়।
+ */
+
+@define-color mux_violet #7c5cff;
+@define-color mux_violet_deep #5a3fd4;
+@define-color mux_mint #00c2a8;
+@define-color mux_coral #ff6f61;
+@define-color mux_dark #12141f;
+@define-color mux_light #e8eaf6;
+
+/* ---------- Launchpad grid ---------- */
+
+/* পুরো পর্দার আস্তর: গাঢ় আধা-স্বচ্ছ। আসল blur compositor-এর কাজ —
+ * labwc-তে blur protocol এলে এই রঙ আরও হালকা হবে (DESIGN.md)। */
+window.mux-launcher {
+    background-color: alpha(@mux_dark, 0.88);
+}
+
+.launcher-search {
+    font-size: 17px;
+    min-height: 42px;
+    border-radius: 21px;
+    padding: 0 18px;
+    color: @mux_light;
+    background-color: alpha(@mux_light, 0.14);
+    border: 1px solid alpha(@mux_light, 0.22);
+    box-shadow: none;
+}
+.launcher-search:focus {
+    border-color: @mux_violet;
+    background-color: alpha(@mux_light, 0.20);
+}
+
+.app-grid {
+    background: transparent;
+}
+
+.app-cell {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 18px;
+    padding: 10px 4px;
+    min-width: 118px;
+    min-height: 132px;
+}
+.app-cell:hover {
+    background-color: alpha(@mux_light, 0.10);
+}
+.app-cell:focus, .app-cell:active {
+    background-color: alpha(@mux_violet, 0.28);
+    outline: 2px solid @mux_violet;
+}
+
+.app-name {
+    color: @mux_light;
+    font-size: 13px;
+    text-shadow: 0 1px 3px alpha(@mux_dark, 0.8);
+}
+
+/* page dot — নিষ্ক্রিয় ধূসর-স্বচ্ছ, সক্রিয়টা mint */
+.page-dot {
+    min-width: 9px;
+    min-height: 9px;
+    border-radius: 5px;
+    padding: 0;
+    background-color: alpha(@mux_light, 0.35);
+    border: none;
+    box-shadow: none;
+}
+.page-dot.active-dot {
+    background-color: @mux_mint;
+}
+.page-dot:hover {
+    background-color: alpha(@mux_light, 0.65);
+}
+
+/* ---------- Spotlight search ---------- */
+
+window.mux-search-window {
+    background: transparent;
+}
+
+.spotlight-card {
+    background-color: alpha(@mux_dark, 0.94);
+    border: 1px solid alpha(@mux_violet, 0.45);
+    border-radius: 16px;
+    padding: 10px;
+    box-shadow: 0 18px 48px alpha(black, 0.55);
+}
+
+.spotlight-entry {
+    font-size: 20px;
+    min-height: 46px;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    color: @mux_light;
+    padding: 0 8px;
+}
+.spotlight-entry:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.spotlight-hint {
+    color: alpha(@mux_light, 0.55);
+    font-size: 13px;
+    padding: 2px 8px 6px 8px;
+}
+
+.result-list {
+    background: transparent;
+}
+.result-list row {
+    background: transparent;
+    border-radius: 10px;
+    color: @mux_light;
+}
+.result-list row:selected {
+    background-color: alpha(@mux_violet, 0.35);
+}
+.result-list row:hover {
+    background-color: alpha(@mux_light, 0.10);
+}
+
+.result-name {
+    font-size: 15px;
+    color: @mux_light;
+}
+.result-path {
+    font-size: 11px;
+    color: alpha(@mux_light, 0.50);
+}
+.result-section {
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: @mux_mint;
+}

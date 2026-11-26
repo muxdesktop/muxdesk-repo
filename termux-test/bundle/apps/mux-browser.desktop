@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Browser
+Comment=ওয়েব দেখা
+Exec=firefox
+Icon=mux-browser
+Terminal=false
+Categories=Network;WebBrowser;
+Keywords=browser;web;firefox;
+StartupNotify=true
+X-MuxDesk-MacLike=true

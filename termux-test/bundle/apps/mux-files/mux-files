@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+"""Mux Files launcher — dev tree থেকেও, বসানো অবস্থা থেকেও চলে।"""
+import os
+import sys
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if os.path.isdir(os.path.join(_HERE, "mux_files")):
+    sys.path.insert(0, _HERE)  # dev: apps/mux-files/
+else:  # বসানো: /usr/share/muxdesk/mux-files/ বা ~/.local/share/muxdesk/mux-files/
+    for base in ("/usr/share/muxdesk", os.path.expanduser("~/.local/share/muxdesk")):
+        cand = os.path.join(base, "mux-files")
+        if os.path.isdir(os.path.join(cand, "mux_files")):
+            sys.path.insert(0, cand)
+            break
+
+import gi
+
+gi.require_version("Gtk", "4.0")
+
+from mux_files.app import main
+
+if __name__ == "__main__":
+    raise SystemExit(main())

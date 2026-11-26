@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- LINK STUB ONLY — not the real xdg-shell protocol.
+     wlr-layer-shell's get_popup request mentions the xdg_popup type, so
+     generated layer-shell code needs the xdg_popup_interface symbol at
+     link time. mux-panel never calls get_popup (its menu is a separate
+     layer surface), so an empty interface declaration is enough to link.
+     The meson build prefers the real xdg-shell.xml from the
+     wayland-protocols package when it is installed (it is, on Arch);
+     this stub is only a fallback for minimal build environments. -->
+<protocol name="xdg_shell_types_stub">
+  <interface name="xdg_popup" version="1">
+    <description summary="short-lived, popup surfaces (type stub)"/>
+    <!-- an interface needs at least one member to satisfy the DTD -->
+    <enum name="error">
+      <entry name="invalid_grab" value="0"/>
+    </enum>
+  </interface>
+</protocol>

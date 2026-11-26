@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Launcher
+Comment=সব app-এর grid ও খোঁজা
+Exec=mux-launcher --grid
+Icon=mux-launchpad
+Terminal=false
+Categories=System;Utility;
+Keywords=launcher;apps;grid;launchpad;
+StartupNotify=false
+X-MuxDesk-MuxLike=true

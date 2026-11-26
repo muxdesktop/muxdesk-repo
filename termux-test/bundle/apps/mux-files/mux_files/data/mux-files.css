@@ -1,0 +1,77 @@
+/* Mux Files — নিজের app-এর CSS (Nautilus-এর css থেকে আলাদা)।
+   সংখ্যা: apps/MUX-FILES-DESIGN.md — sidebar 218px/row 32px,
+   headerbar 44px, statusbar 26px, 4pt spacing, radius 12/8/6।
+   Frosted glass: এখানে alpha (অর্ধ-স্বচ্ছ) background — আসল blur
+   compositor করে; software rendering-এ blur বন্ধ রাখা সৎ পথ। */
+
+.mux-files-window {
+  background-color: alpha(@theme_bg_color, 0.96);
+}
+
+.mux-headerbar {
+  min-height: 44px;
+  padding: 0 10px;
+  background-color: alpha(@theme_bg_color, 0.88);
+  border-bottom: 1px solid alpha(@theme_fg_color, 0.07);
+}
+.mux-headerbar button {
+  min-width: 28px;
+  min-height: 28px;
+  border-radius: 8px;
+  margin: 0 3px;
+}
+.mux-breadcrumb button {
+  border-radius: 6px;
+  padding: 2px 10px;
+}
+
+.mux-sidebar {
+  background-color: alpha(@theme_bg_color, 0.82);
+  min-width: 218px;
+}
+.mux-sidebar-title {
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+  opacity: 0.55;
+  padding: 14px 18px 4px 18px;
+}
+.mux-places {
+  background: transparent;
+}
+.mux-places row {
+  min-height: 32px;
+  padding: 6px 10px;
+  margin: 1px 8px;
+  border-radius: 6px;
+}
+.mux-places row:selected {
+  background-color: alpha(#7c5cff, 0.14);
+  color: @theme_fg_color;
+}
+.mux-places row:hover {
+  background-color: alpha(@theme_fg_color, 0.04);
+}
+
+.mux-grid, .mux-list {
+  background-color: @theme_base_color;
+  padding: 8px;
+}
+.mux-grid child:selected, .mux-list row:selected {
+  background-color: alpha(#7c5cff, 0.16);
+  border-radius: 6px;
+}
+
+.mux-bottombar {
+  min-height: 26px;
+  padding: 4px 12px;
+  border-top: 1px solid alpha(@theme_fg_color, 0.07);
+  background-color: alpha(@theme_bg_color, 0.9);
+}
+.mux-status { font-size: 11px; opacity: 0.75; }
+.mux-pathbar {
+  font-size: 12px;
+  min-height: 24px;
+  border-radius: 6px;
+}
+.mux-empty { opacity: 0.5; padding: 24px; }

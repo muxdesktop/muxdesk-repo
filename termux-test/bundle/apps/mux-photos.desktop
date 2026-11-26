@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Photos
+Comment=ছবি দেখা
+Exec=sh -c 'command -v loupe >/dev/null && exec loupe "$@"; exec eog "$@"' sh %U
+Icon=mux-photos
+Terminal=false
+Categories=Graphics;Photography;Viewer;
+Keywords=photos;images;pictures;
+StartupNotify=true
+X-MuxDesk-MacLike=true

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Files
+Comment=ফাইল দেখা ও সাজানো — আমাদের নিজের file manager (GTK4)
+Exec=mux-files
+Icon=mux-files
+Terminal=false
+Categories=System;FileTools;FileManager;
+Keywords=files;folder;
+StartupNotify=true
+StartupWMClass=com.muxdesk.MuxFiles
+X-MuxDesk-MacLike=true
+X-MuxDesk-OwnApp=true

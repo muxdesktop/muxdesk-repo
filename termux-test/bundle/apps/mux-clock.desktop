@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Mux Clock
+Comment=ঘড়ি, অ্যালার্ম, টাইমার
+Exec=gnome-clocks
+Icon=mux-clock
+Terminal=false
+Categories=Utility;Clock;
+Keywords=clock;alarm;timer;
+StartupNotify=true
+X-MuxDesk-MacLike=true
