@@ -37,12 +37,12 @@ Previews of the MuxLike desktop environment are in the `screenshots/` folder.
 ## MuxOS 1.0 LTS freeze (aarch64)
 
 MuxOS is LTS, not rolling. The frozen aarch64 package set lives in
-[`lts/1.2/aarch64/`](lts/1.2/aarch64/) — 481 pinned packages
-(`manifest.json`), 392 of them hosted as immutable package files with a
-pacman database (`muxdesk-lts.db`). Policy: [`lts/1.2/LTS-POLICY.md`](lts/1.2/LTS-POLICY.md).
+[`lts/1.3/aarch64/`](lts/1.3/aarch64/) — 482 pinned packages
+(`manifest.json`), 396 of them hosted as immutable package files with a
+pacman database (`muxdesk-lts.db`). Policy: [`lts/1.3/LTS-POLICY.md`](lts/1.3/LTS-POLICY.md).
 
 ```ini
 [muxdesk-lts]
 SigLevel = Never
-Server = https://muxdesktop.github.io/muxdesk-repo/lts/1.2/$arch
+Server = https://muxdesktop.github.io/muxdesk-repo/lts/1.3/$arch
 ```
