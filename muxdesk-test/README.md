@@ -26,14 +26,16 @@ the native app path is the real target. A Wayland nesting option
 # 1) Download and unpack this test package (in Termux)
 pkg install -y unzip curl
 curl -L -o muxdesk-termux-test.zip \
-  https://github.com/muxdesktop/muxdesk-repo/releases/download/muxdesk-termux-test-v1/muxdesk-termux-test.zip
+  https://github.com/muxdesktop/muxdesk-repo/releases/download/muxdesk-termux-test-v2/muxdesk-termux-test.zip
 unzip -o muxdesk-termux-test.zip
 
 # 2) Setup — installs proot-distro/Termux:X11 support, then installs
 #    the MuxOS image as the proot-distro container "muxdesk".
-#    Pass the image path or its download URL, or put the tarball in
-#    ~/ or ~/storage/downloads and it is found automatically.
-bash muxdesk-test/muxdesk-termux-setup.sh /path/to/muxdesk-rootfs-aarch64-vX.tar.gz
+#    With no argument it downloads the current published image
+#    (MuxOS 1.0 LTS, rootfs-v4.0, ~1.6 GB) itself and verifies its
+#    pinned sha256 (a9792d86…) before installing. Or pass an image
+#    path/URL, or put the tarball in ~/ or ~/storage/downloads.
+bash muxdesk-test/muxdesk-termux-setup.sh
 
 # 3) Start the DE (X11 test path)
 bash ~/start-muxdesk.sh

@@ -12,7 +12,9 @@
 #   - a path to the rootfs tarball (muxdesk-rootfs-aarch64-*.tar.*)
 #   - an https:// download URL for it
 #   - omitted: the script searches ~, ~/storage/downloads and the
-#     current folder for muxdesk-rootfs-aarch64-*.tar.*
+#     current folder; if nothing is found it downloads the current
+#     published image (MuxOS 1.0 LTS, rootfs-v4.0) itself and verifies
+#     its pinned sha256 before installing.
 #
 # Safe to re-run: an existing "muxdesk" container is kept (resume).
 set -u
@@ -85,9 +87,15 @@ container_installed() {
 if container_installed; then
   ok "MuxOS container is already installed — keeping it (resume)"
 else
-  step "Step 3/4: Installing the MuxDesk rootfs image"
+  step "Step 3/4: Installing the MuxOS rootfs image"
+  # Current published image (MuxOS 1.0 LTS, rootfs-v4.0). Used only
+  # when no image is passed or found locally; its sha256 is pinned
+  # here so a damaged 1.6 GB download is caught before installing.
+  DEFAULT_IMAGE_URL="https://github.com/muxdesktop/muxdesk-repo/releases/download/rootfs-v4.0/muxdesk-rootfs-aarch64-v4.0.tar.gz"
+  DEFAULT_IMAGE_SHA256="a9792d865c34336686db306415f04b4fae45317db4043d01b1346fc838e4ac78"
   IMAGE="${1:-${MUXDESK_IMAGE:-}}"
   TARBALL=""
+  EXPECTED_SHA=""
   if [ -n "$IMAGE" ] && [ -f "$IMAGE" ]; then
     TARBALL="$IMAGE"
   elif [ -n "$IMAGE" ] && [ "${IMAGE#https://}" != "$IMAGE" ]; then
@@ -100,9 +108,35 @@ else
         [ -f "$f" ] && { TARBALL="$f"; break 2; }
       done
     done
-    [ -n "$TARBALL" ] || die "No MuxDesk rootfs image found. Download muxdesk-rootfs-aarch64-*.tar.* from the muxdesk-repo Releases, put it in ~/ or ~/storage/downloads, or pass its path/URL: bash muxdesk-termux-setup.sh <path-or-url>"
+    if [ -z "$TARBALL" ]; then
+      echo "No local image found — using the current published image (MuxOS 1.0 LTS, rootfs-v4.0, ~1.6 GB)."
+      TARBALL="$HOME/$(basename "$DEFAULT_IMAGE_URL")"
+      EXPECTED_SHA="$DEFAULT_IMAGE_SHA256"
+      echo "Downloading to $TARBALL (keep Wi-Fi on; re-running resumes)..."
+      curl -L -C - -o "$TARBALL" "$DEFAULT_IMAGE_URL" || die "download failed — re-run this script and the download resumes"
+    fi
   fi
   ok "Image: $TARBALL ($(du -h "$TARBALL" | cut -f1))"
+  # Integrity check before installing 1.6 GB of rootfs: pinned hash
+  # for the default image, otherwise a sidecar .sha256 next to the
+  # tarball when one exists.
+  if [ -n "$EXPECTED_SHA" ]; then
+    echo "Verifying sha256 (pinned for rootfs-v4.0)..."
+    if printf '%s  %s\n' "$EXPECTED_SHA" "$TARBALL" | sha256sum -c - >/dev/null 2>&1; then
+      ok "sha256 verified"
+    else
+      die "sha256 MISMATCH — the downloaded image is damaged or incomplete. Delete $TARBALL and run this script again."
+    fi
+  elif [ -f "$TARBALL.sha256" ]; then
+    echo "Verifying sha256 from $TARBALL.sha256 ..."
+    if ( cd "$(dirname "$TARBALL")" && sha256sum -c "$(basename "$TARBALL").sha256" >/dev/null 2>&1 ); then
+      ok "sha256 verified"
+    else
+      die "sha256 MISMATCH — the image file is damaged. Re-download it and run this script again."
+    fi
+  else
+    warn "No sha256 available for this image — skipping the integrity check"
+  fi
   echo "Installing into proot-distro as container '$CONTAINER' (this extracts the full image — be patient)..."
   proot-distro install "$TARBALL" --name "$CONTAINER" || warn "proot-distro install reported an error — verifying before giving up"
   if ! container_installed; then
