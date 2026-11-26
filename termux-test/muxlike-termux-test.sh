@@ -32,11 +32,31 @@ pkg install -y termux-x11-nightly || warn "termux-x11-nightly install failed —
 command -v proot-distro >/dev/null 2>&1 && ok "proot-distro installed" || die "proot-distro still missing"
 command -v termux-x11 >/dev/null 2>&1 && ok "termux-x11 command installed" || warn "termux-x11 command not found — check the x11-repo step above"
 # The Termux:X11 Android app is a separate app from the command.
-if command -v pm >/dev/null 2>&1 && pm list packages 2>/dev/null | grep -q 'com.termux.x11'; then
+# Detection must be thorough: in Termux, `pm` is often NOT on PATH
+# (v2 first cut missed an installed app exactly that way), so probe the
+# package manager through every route — PATH pm, /system/bin/pm,
+# `cmd package`, and `pm path`. Any single hit means the app is there.
+x11_app_detected() {
+  local pm_bin=""
+  command -v pm >/dev/null 2>&1 && pm_bin="pm"
+  [ -z "$pm_bin" ] && [ -x /system/bin/pm ] && pm_bin="/system/bin/pm"
+  if [ -n "$pm_bin" ]; then
+    "$pm_bin" list packages 2>/dev/null | grep -q 'com\.termux\.x11' && return 0
+    "$pm_bin" path com.termux.x11 >/dev/null 2>&1 && return 0
+  fi
+  if command -v cmd >/dev/null 2>&1; then
+    cmd package list packages 2>/dev/null | grep -q 'com\.termux\.x11' && return 0
+    cmd package path com.termux.x11 >/dev/null 2>&1 && return 0
+  fi
+  [ -x /system/bin/cmd ] && /system/bin/cmd package list packages 2>/dev/null | grep -q 'com\.termux\.x11' && return 0
+  return 1
+}
+if x11_app_detected; then
   ok "Termux:X11 app detected"
 else
-  warn "Termux:X11 APP not detected. The 'termux-x11' command alone is not enough:"
-  warn "install the Termux:X11 app (APK from the Termux:X11 GitHub releases / F-Droid) before starting the desktop."
+  warn "Termux:X11 APP could not be confirmed from inside Termux (Android sometimes hides it)."
+  warn "If you already installed the Termux:X11 app, ignore this. If not: install it"
+  warn "(APK from the Termux:X11 GitHub releases / F-Droid) before starting the desktop."
 fi
 
 # The start script is created FIRST, so it exists even if a later step
