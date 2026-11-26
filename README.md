@@ -1,6 +1,6 @@
 # muxdesk-repo
 
-The official package repository and download hub for **MuxDesk**, an Arch-based Linux distribution.
+The official package repository and download hub for **MuxOS**, an Arch-based Linux distribution.
 
 ## Pacman repository (GitHub Pages)
 
