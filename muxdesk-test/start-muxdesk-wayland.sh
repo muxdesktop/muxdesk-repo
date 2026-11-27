@@ -47,6 +47,15 @@ fi
 ok "Wayland socket dir: $WL_DIR"
 mkdir -p "$SHM_DIR"
 
+# Phone timezone -> session (same mechanism as the X11 start script:
+# inside-start reads tz.env from the bind-mounted package dir).
+TZ_NAME=""
+for GP in getprop /system/bin/getprop; do
+  TZ_NAME="$("$GP" persist.sys.timezone 2>/dev/null || true)"
+  [ -n "$TZ_NAME" ] && break
+done
+if [ -n "$TZ_NAME" ]; then printf '%s\n' "$TZ_NAME" > "$PKG_DIR/tz.env"; else rm -f "$PKG_DIR/tz.env"; fi
+
 step "Starting the MuxOS DE session (labwc nested on Wayland)"
 echo "Switch to the Termux:Wayland app to see the desktop."
 echo "To stop: exit the session from inside, or press Ctrl+C here."

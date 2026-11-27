@@ -71,6 +71,22 @@ if [ "$READY" != 1 ]; then
 fi
 ok "Termux:X11 server is up (socket $SOCK)"
 
+# The image has tzdata but no /etc/localtime, so the panel clock
+# showed UTC on the phone. Hand the phone's own timezone to the
+# session via the bind-mounted package dir (inside-start reads
+# tz.env) — no fragile login flags needed.
+TZ_NAME=""
+for GP in getprop /system/bin/getprop; do
+  TZ_NAME="$("$GP" persist.sys.timezone 2>/dev/null || true)"
+  [ -n "$TZ_NAME" ] && break
+done
+if [ -n "$TZ_NAME" ]; then
+  printf '%s\n' "$TZ_NAME" > "$PKG_DIR/tz.env"
+  echo "Phone timezone: $TZ_NAME (passed to the session)"
+else
+  rm -f "$PKG_DIR/tz.env"
+fi
+
 step "Starting the MuxOS DE session (labwc nested on X11)"
 echo "Now open the Termux:X11 app to see the desktop."
 echo "To stop: exit the session from inside, or press Ctrl+C here."

@@ -27,6 +27,33 @@ export GSK_RENDERER=cairo
 export XDG_CURRENT_DESKTOP=MuxLike
 export XDG_SESSION_TYPE=wayland
 
+# Timezone: the start script writes the phone's zone (Android
+# persist.sys.timezone) into tz.env in the bind-mounted package dir;
+# the image has tzdata but no /etc/localtime, so without this the
+# panel clock shows UTC.
+if [ -z "${TZ:-}" ] && [ -f /root/muxdesk-test/tz.env ]; then
+  TZ="$(tr -d ' \r\n' < /root/muxdesk-test/tz.env)"
+  [ -n "$TZ" ] && export TZ
+fi
+
+# Theme: the image ships our MuxLike icon theme but nothing selects
+# it, and GTK defaults to light — on the phone Files came up white
+# with stock blue folder icons. Write the GTK settings ONCE (never
+# overwrite an existing file): dark variant + MuxLike icons.
+for V in gtk-4.0 gtk-3.0; do
+  INI="$HOME/.config/$V/settings.ini"
+  if [ ! -f "$INI" ]; then
+    mkdir -p "$HOME/.config/$V"
+    {
+      echo '[Settings]'
+      echo 'gtk-application-prefer-dark-theme=1'
+      [ -d /usr/share/icons/MuxLike ] && echo 'gtk-icon-theme-name=MuxLike'
+      [ -d /usr/share/icons/default/cursors ] && echo 'gtk-cursor-theme-name=default'
+    } > "$INI"
+    echo "[test-path] Wrote $INI (dark theme + MuxLike icons)."
+  fi
+done
+
 if [ "$MODE" = "wayland" ]; then
   # Termux:Wayland's socket dir is bind-mounted at /root/.wayland-host
   # by the start script; it becomes the runtime dir so labwc finds the
