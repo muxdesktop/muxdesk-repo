@@ -19,7 +19,16 @@ fail() { echo "[FAIL] $*"; }
 SHM_DIR="$PREFIX/tmp/muxdesk-shm"
 
 command -v proot-distro >/dev/null 2>&1 || { fail "proot-distro not found — run the setup script first"; exit 1; }
-proot-distro list 2>/dev/null | grep -qw "$CONTAINER" || { fail "MuxOS container not installed — run the setup script first."; exit 1; }
+# Container check — same robust logic as the setup script (list grep
+# alone missed an existing container on the user's phone).
+container_installed() {
+  proot-distro list 2>/dev/null | grep -qw "$CONTAINER" && return 0
+  [ -d "$PREFIX/var/lib/proot-distro/containers/$CONTAINER/rootfs" ] && return 0
+  [ -d "$PREFIX/var/lib/proot-distro/installed-rootfs/$CONTAINER" ] && return 0
+  proot-distro login "$CONTAINER" -- /bin/true 2>/dev/null && return 0
+  return 1
+}
+container_installed || { fail "MuxOS container not installed — run the setup script first."; exit 1; }
 
 step "Looking for the Termux:Wayland compositor socket"
 echo "The Termux:Wayland app must be OPEN (it creates the socket when it runs)."

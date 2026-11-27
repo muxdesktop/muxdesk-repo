@@ -24,7 +24,19 @@ SHM_DIR="$PREFIX/tmp/muxdesk-shm"
 
 command -v termux-x11 >/dev/null 2>&1 || { fail "termux-x11 command not found — run the setup script first: bash muxdesk-termux-setup.sh"; exit 1; }
 command -v proot-distro >/dev/null 2>&1 || { fail "proot-distro not found — run the setup script first"; exit 1; }
-proot-distro list 2>/dev/null | grep -qw "$CONTAINER" || { fail "MuxOS container not installed — run the setup script first."; exit 1; }
+# Container check — SAME logic as the setup script, never list alone:
+# on the user's phone `proot-distro list` output did not match a plain
+# grep even though the container existed and login worked (v2 bug).
+# Fallbacks: both known rootfs layouts, then a login probe (the
+# ground truth — if we can log in, the container is there).
+container_installed() {
+  proot-distro list 2>/dev/null | grep -qw "$CONTAINER" && return 0
+  [ -d "$PREFIX/var/lib/proot-distro/containers/$CONTAINER/rootfs" ] && return 0
+  [ -d "$PREFIX/var/lib/proot-distro/installed-rootfs/$CONTAINER" ] && return 0
+  proot-distro login "$CONTAINER" -- /bin/true 2>/dev/null && return 0
+  return 1
+}
+container_installed || { fail "MuxOS container not installed — run the setup script first."; exit 1; }
 
 step "Starting Termux:X11 server on :0"
 # The socket directory must exist BEFORE proot starts, or proot drops

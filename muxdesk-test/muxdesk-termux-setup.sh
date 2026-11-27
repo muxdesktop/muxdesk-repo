@@ -98,6 +98,10 @@ else
   EXPECTED_SHA=""
   if [ -n "$IMAGE" ] && [ -f "$IMAGE" ]; then
     TARBALL="$IMAGE"
+    # The pinned hash also applies to a local file with the exact
+    # published name (the phone run had the v4.0 file in ~ with no
+    # sidecar, so the check was skipped — fixed).
+    [ "$(basename "$TARBALL")" = "$(basename "$DEFAULT_IMAGE_URL")" ] && EXPECTED_SHA="$DEFAULT_IMAGE_SHA256"
   elif [ -n "$IMAGE" ] && [ "${IMAGE#https://}" != "$IMAGE" ]; then
     TARBALL="$HOME/$(basename "$IMAGE")"
     echo "Downloading the MuxOS image to $TARBALL (large — keep Wi-Fi on)..."
@@ -117,6 +121,11 @@ else
     fi
   fi
   ok "Image: $TARBALL ($(du -h "$TARBALL" | cut -f1))"
+  # A locally-found file with the exact published v4.0 name gets the
+  # pinned hash too (auto-search path).
+  if [ -z "$EXPECTED_SHA" ] && [ "$(basename "$TARBALL")" = "$(basename "$DEFAULT_IMAGE_URL")" ]; then
+    EXPECTED_SHA="$DEFAULT_IMAGE_SHA256"
+  fi
   # Integrity check before installing 1.6 GB of rootfs: pinned hash
   # for the default image, otherwise a sidecar .sha256 next to the
   # tarball when one exists.
