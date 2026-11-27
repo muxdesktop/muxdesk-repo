@@ -26,7 +26,7 @@ the native app path is the real target. A Wayland nesting option
 # 1) Download and unpack this test package (in Termux)
 pkg install -y unzip curl
 curl -L -o muxdesk-termux-test.zip \
-  https://github.com/muxdesktop/muxdesk-repo/releases/download/muxdesk-termux-test-v5/muxdesk-termux-test.zip
+  https://github.com/muxdesktop/muxdesk-repo/releases/download/muxdesk-termux-test-v6/muxdesk-termux-test.zip
 unzip -o muxdesk-termux-test.zip
 
 # 2) Setup — installs proot-distro/Termux:X11 support, then installs

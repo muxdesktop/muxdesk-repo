@@ -93,17 +93,56 @@ elif command -v labwc >/dev/null 2>&1; then
   # Test-path fallback: write a minimal autostart ONCE (never
   # overwrite an existing one) so the test shows the actual DE.
   CFG_DIR="$HOME/.config/labwc"
+  mkdir -p "$CFG_DIR"
+  # Wallpaper (Appearance contract): the user's chosen wallpaper from
+  # ~/.config/muxdesk/appearance.conf wins; else our bundled MuxLike
+  # gradient (shipped in this package, bind-mounted at
+  # /root/muxdesk-test/wallpaper.png); else a solid color.
+  WP=""
+  if [ -f "$HOME/.config/muxdesk/appearance.conf" ]; then
+    WP="$(sed -n 's/^[[:space:]]*wallpaper[[:space:]]*=[[:space:]]*//p' "$HOME/.config/muxdesk/appearance.conf" | head -1 | tr -d '\r')"
+    if [ -n "$WP" ] && [ ! -f "$WP" ]; then WP=""; fi
+  fi
+  if [ -z "$WP" ] && [ -f /root/muxdesk-test/wallpaper.png ]; then WP=/root/muxdesk-test/wallpaper.png; fi
   if [ ! -f "$CFG_DIR/autostart" ] && { command -v mux-panel >/dev/null 2>&1 || command -v mux-dock >/dev/null 2>&1; }; then
-    mkdir -p "$CFG_DIR"
     {
       echo '# Written by the MuxOS test path (inside-start.sh) because'
       echo '# this image ships no labwc autostart. Safe to edit/remove.'
-      command -v swaybg >/dev/null 2>&1 && echo "swaybg -c '#1d1033' >/dev/null 2>&1 &"
+      if command -v swaybg >/dev/null 2>&1; then
+        if [ -n "$WP" ]; then echo "swaybg -i '$WP' -m fill >/dev/null 2>&1 &"; else echo "swaybg -c '#1d1033' >/dev/null 2>&1 &"; fi
+      fi
       command -v mux-panel >/dev/null 2>&1 && echo 'mux-panel >/dev/null 2>&1 &'
       command -v mux-dock >/dev/null 2>&1 && echo 'mux-dock >/dev/null 2>&1 &'
     } > "$CFG_DIR/autostart"
     chmod +x "$CFG_DIR/autostart"
-    echo "[test-path] Image has panel/dock but no session wiring — wrote a fallback labwc autostart (swaybg + mux-panel + mux-dock)."
+    echo "[test-path] Image has panel/dock but no session wiring — wrote a fallback labwc autostart (wallpaper + mux-panel + mux-dock)."
+  elif [ -f "$CFG_DIR/autostart" ] && [ -n "$WP" ] && grep -q 'Written by the MuxOS test path' "$CFG_DIR/autostart"; then
+    # Upgrade OUR OWN earlier fallback (v4 wrote a solid-color swaybg
+    # line): swap just that line for the real wallpaper. A hand-edited
+    # or image-shipped autostart is never touched.
+    sed -i "s|^swaybg -c '#1d1033'.*|swaybg -i '$WP' -m fill >/dev/null 2>\\&1 \\&|" "$CFG_DIR/autostart"
+  fi
+  # Root (right-click) menu: the stock labwc menu (Terminal /
+  # Reconfigure / Exit) is not ours. Write OUR menu.xml once — items
+  # only for things that actually exist in this image.
+  if [ ! -f "$CFG_DIR/menu.xml" ]; then
+    {
+      echo '<?xml version="1.0" encoding="UTF-8"?>'
+      echo '<openbox_menu>'
+      echo '  <menu id="root-menu" label="MuxOS">'
+      command -v mux-settings >/dev/null 2>&1 && echo '    <item label="About MuxOS"><action name="Execute"><command>mux-settings</command></action></item>'
+      echo '    <item label="New Folder"><action name="Execute"><command>sh /root/muxdesk-test/new-folder.sh</command></action></item>'
+      echo '    <item label="Refresh"><action name="Reconfigure" /></item>'
+      command -v mux-appearance >/dev/null 2>&1 && echo '    <item label="Change Wallpaper"><action name="Execute"><command>mux-appearance</command></action></item>'
+      for T in mux-terminal foot alacritty kitty wezterm xterm; do
+        if command -v "$T" >/dev/null 2>&1; then echo "    <item label=\"Open Terminal\"><action name=\"Execute\"><command>$T</command></action></item>"; break; fi
+      done
+      echo '    <separator />'
+      echo '    <item label="Exit"><action name="Exit" /></item>'
+      echo '  </menu>'
+      echo '</openbox_menu>'
+    } > "$CFG_DIR/menu.xml"
+    echo "[test-path] Wrote our labwc root menu (menu.xml) — right-click the desktop."
   fi
   exec labwc
 else
