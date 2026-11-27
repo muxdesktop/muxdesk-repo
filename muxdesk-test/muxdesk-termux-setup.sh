@@ -159,12 +159,26 @@ else
 fi
 
 step "Step 4/4: Checking the session entry inside the distro"
-if proot-distro login "$CONTAINER" -- /bin/sh -c 'test -x /usr/local/bin/run-desktop || test -x /usr/local/bin/muxlike-session || test -x /usr/bin/labwc' 2>/dev/null; then
-  ok "Session entry found inside the distro (run-desktop / muxlike-session / labwc)"
-else
-  warn "No session entry found inside the distro yet — the image may still be the bare base."
-  warn "The start script will tell you the same. (The DE stack is the image builders' part.)"
-fi
+ENTRY="$(proot-distro login "$CONTAINER" -- /bin/sh -c '
+  if test -x /usr/local/bin/run-desktop; then echo run-desktop;
+  elif test -x /usr/lib/muxdesk/run-desktop.sh && grep -q muxlike /usr/lib/muxdesk/run-desktop.sh 2>/dev/null; then echo run-desktop;
+  elif test -x /usr/local/bin/muxlike-session; then echo muxlike-session;
+  elif test -x /usr/bin/labwc; then
+    if test -x /usr/bin/mux-panel && test -x /usr/bin/mux-dock; then echo labwc-fallback; else echo labwc; fi
+  else echo none; fi' 2>/dev/null | tr -d '\r' | tail -1)"
+case "$ENTRY" in
+  run-desktop|muxlike-session)
+    ok "Session entry found inside the distro: $ENTRY" ;;
+  labwc-fallback)
+    ok "Session entry found: labwc + MuxLike panel/dock binaries"
+    warn "The image has no session wiring (no labwc autostart) — the test path starts panel/dock via a fallback autostart." ;;
+  labwc)
+    ok "Session entry found inside the distro: plain labwc"
+    warn "No panel/dock in this image — start opens a bare labwc desktop." ;;
+  *)
+    warn "No session entry found inside the distro yet — the image may still be the bare base."
+    warn "The start script will tell you the same. (The DE stack is the image builders' part.)" ;;
+esac
 
 echo ""
 echo "============================================================"

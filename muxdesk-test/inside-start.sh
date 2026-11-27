@@ -48,11 +48,36 @@ echo "Open the Termux:X11 app (X11 test) or the Termux:Wayland app (Wayland test
 if [ -x /usr/local/bin/run-desktop ]; then
   echo "Session entry: run-desktop ($(cat /etc/muxdesk-session 2>/dev/null || echo 'no /etc/muxdesk-session'))"
   exec /usr/local/bin/run-desktop
+elif [ -x /usr/lib/muxdesk/run-desktop.sh ] && grep -q muxlike /usr/lib/muxdesk/run-desktop.sh 2>/dev/null; then
+  # The v4.0 image carries an older run-desktop at /usr/lib/muxdesk/
+  # with NO muxlike case (it would try GNOME, which the image does
+  # not contain) — use it only once it actually knows muxlike.
+  echo "Session entry: /usr/lib/muxdesk/run-desktop.sh (muxlike)"
+  exec /usr/lib/muxdesk/run-desktop.sh
 elif [ -x /usr/local/bin/muxlike-session ]; then
   echo "Session entry: muxlike-session"
   exec /usr/local/bin/muxlike-session
 elif command -v labwc >/dev/null 2>&1; then
   echo "Session entry: labwc (direct — no run-desktop in this image)"
+  # v4.0 image gap (verified from the published tarball): mux-panel,
+  # mux-dock and swaybg ARE installed (/usr/bin) but the image has NO
+  # labwc autostart and no session wiring — plain labwc = black
+  # screen with only a cursor (seen on the phone, 2026-11-27).
+  # Test-path fallback: write a minimal autostart ONCE (never
+  # overwrite an existing one) so the test shows the actual DE.
+  CFG_DIR="$HOME/.config/labwc"
+  if [ ! -f "$CFG_DIR/autostart" ] && { command -v mux-panel >/dev/null 2>&1 || command -v mux-dock >/dev/null 2>&1; }; then
+    mkdir -p "$CFG_DIR"
+    {
+      echo '# Written by the MuxOS test path (inside-start.sh) because'
+      echo '# this image ships no labwc autostart. Safe to edit/remove.'
+      command -v swaybg >/dev/null 2>&1 && echo "swaybg -c '#1d1033' >/dev/null 2>&1 &"
+      command -v mux-panel >/dev/null 2>&1 && echo 'mux-panel >/dev/null 2>&1 &'
+      command -v mux-dock >/dev/null 2>&1 && echo 'mux-dock >/dev/null 2>&1 &'
+    } > "$CFG_DIR/autostart"
+    chmod +x "$CFG_DIR/autostart"
+    echo "[test-path] Image has panel/dock but no session wiring — wrote a fallback labwc autostart (swaybg + mux-panel + mux-dock)."
+  fi
   exec labwc
 else
   echo "[FAIL] No session entry inside this image: no run-desktop, no muxlike-session, no labwc."
